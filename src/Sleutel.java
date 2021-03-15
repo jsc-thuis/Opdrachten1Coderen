@@ -15,7 +15,7 @@ public class Sleutel {
         char kar;
         // Ascii-code van 'A' is 65, van 'B' is 66, enzovoort
         for (kar = 'A'; kar <= 'Z'; kar++) {
-            secretMap.put(kar, (int) kar - 64);   // ('A',65 - 64)  of ('A', 1)  enz....
+            secretMap.put(kar, (int) kar - 64);   // secretMap('A',1) enz
         }
         secretMap.put(' ', 0);   // spatie krijgt code 0
         secretMap.put('.', 27);  // punt krijgt code 27
@@ -25,7 +25,14 @@ public class Sleutel {
     // bijbehorende codes op het scherm.
     // Vervolledig de methode printSleutel.
     public void printSleutel() {
-
+        // kortste manier maar vaste lay-out
+        System.out.println(secretMap);
+        // door te itereren over de Set van karakters
+        System.out.println("");
+        for (char teken : secretMap.keySet()) {
+            int code = secretMap.get(teken);
+            System.out.println(teken + " " + code);
+        }
     }
 
     // De methode codeerBoodschap heeft een boodschap als parameter
@@ -36,9 +43,12 @@ public class Sleutel {
     public String codeerBoodschap(String boodschap) {
         boodschap = boodschap.trim().toUpperCase();
         String gecodeerdeBoodschap = "";
-
+        for (int i = 0; i < boodschap.length(); i++) {
+            char kar = boodschap.charAt(i);
+            int code = secretMap.get(kar);
+            gecodeerdeBoodschap += " " + code;
+        }
         return gecodeerdeBoodschap;
-
     }
 
     // De methode decodeerBoodschap heeft een boodschap in cijfercode
@@ -51,7 +61,15 @@ public class Sleutel {
     // Vul de methode decodeerBoodschap verder aan.
     public String decodeerBoodschap(String boodschap) {
         String gedecodeerdeBoodschap = "";
-
+        String[] codeArray = boodschap.split(" ");
+        for (String code : codeArray) {
+            for (char teken : secretMap.keySet()) {
+                int c = secretMap.get(teken);
+                if (Integer.toString(c).equals(code)) {
+                    gedecodeerdeBoodschap += teken;
+                }
+            }
+        }
         return gedecodeerdeBoodschap;
     }
 }
